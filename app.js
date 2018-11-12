@@ -70,12 +70,12 @@ app.get('/',(req,res)=>{
 //});
 
 // catch 404 and forward to error handler
-//app.use(function(req, res, next) {
- // var err = new Error('Not Found');
-  //err.status = 404;
-  //next(err);
-  // res.sendFile(__dirname + '/app_client/index.html');
-//});
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+ err.status = 404;
+  ext(err);
+  res.sendFile(__dirname + '/dist/gitsearch2/index.html');
+});
 
 // error handlers
 
