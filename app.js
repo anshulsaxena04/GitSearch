@@ -37,9 +37,9 @@ app.use(express.static(path.join(__dirname, 'uploads')));
 //Connection with db
 /* mongoose.connect('mongodb://pFacADM:adnate%4016%2f09@localhost:27056/distance_calculator?authSource=admin');
  */
-// app.get('*', function(req, res) {
-//     res.sendfile('./app_client/index.html')
-//     })
+ app.get('*', function(req, res) {
+    res.sendfile('./dist/gitsearch2/index.html')
+    })
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
