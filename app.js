@@ -31,15 +31,17 @@ var AssemblyMaster = require('./app_api/routes/AssemblyMaster.route');
 //mongoose.connect('mongodb://pFacADM:adnate%4016%2f09@35.154.237.104:27056/IOT?authSource=admin');
 require('./mysqldb'); 
 app.use(express.static(path.join(__dirname, 'app_client')));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'uploads')));
+//app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'uploads')));
+
+
 
 //Connection with db
 /* mongoose.connect('mongodb://pFacADM:adnate%4016%2f09@localhost:27056/distance_calculator?authSource=admin');
  */
- app.get('*', function(req, res) {
-    res.sendfile('./dist/gitsearch2/index.html')
-    })
+/* app.get('*', function(req, res) {
+  res.sendFile('./app_client/index.html')
+         }) */
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -70,12 +72,12 @@ app.get('/',(req,res)=>{
 //});
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
- err.status = 404;
-  ext(err);
-  res.sendFile(__dirname + '/dist/gitsearch2/index.html');
-});
+//app.use(function(req, res, next) {
+ // var err = new Error('Not Found');
+  //err.status = 404;
+  //next(err);
+  // res.sendFile(__dirname + '/app_client/index.html');
+//});
 
 // error handlers
 
