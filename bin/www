@@ -1,0 +1,164 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('MSI:server');
+var http = require('http');
+var url = 'mongodb://pFacADM:adnate%4016%2F09@35.154.237.104:27056/IOT?authSource=admin'
+var MongoClient = require('mongodb').MongoClient
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3005');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/* var io = require('socket.io')(server); */
+/* 
+module.exports.gpsio = io.of('/gps');
+module.exports.geoFenceio = io.of('/geoFence');
+require('../tcpserver.js')(module.exports.gpsio, module.exports.geoFenceio)
+ */
+/** socket init send last received data */
+/* module.exports.gpsio.on('connection', function (socket) {
+  console.log("socket connected")
+  socket.on('initLive', function (from, msg) {
+    console.log(from, ' is requesting live track init.');
+    MongoClient.connect(url, function (err, db) {
+      if (err) {
+          console.error(err)
+          return;
+      }
+      db.collection('gpstracker').aggregate([
+        { $match: { imei: from } },
+        { $sort: { "insertionTime": -1 } },
+        {$limit : 1},
+        {
+          $lookup:
+          {
+              from: "devInfo",
+              localField: "imei",
+              foreignField: "Device_ID",
+              as: "lookedUpDevice"
+          }
+        },
+        {$unwind : "$lookedUpDevice"}
+      ]).toArray(function (err, lastData) {
+          if (err) {
+              console.error(err)
+              return;
+          }
+          else if(lastData.length > 0) {
+            
+            console.log("Sending init data", JSON.stringify(lastData[0]))
+
+            socket.emit(from, lastData[0], true, lastData[0].lookedUpDevice)
+            
+          }
+          db.close();
+      });
+  });    
+
+  });
+})
+ */
+
+/** redundant */
+/* io.on('connection', function (socket) {
+    io.emit('init', { serverConfirmation: true});
+  
+    socket.on('private message', function (from, msg) {
+      console.log('I received a private message by ', from, ' saying ', msg);
+    });
+  
+    socket.on('disconnect', function () {
+      //io.emit('user disconnected');
+    });
+}); */
+/* app.set('socketio',io) */
+app.set('server', server)
+
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+  console.log('Listening on ' + bind);
+}
+
+/* module.exports.io = io;
+
+io.on('connection', function(socket) {
+  console.log("client connected" + socket);
+}); */
